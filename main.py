@@ -112,7 +112,7 @@ def save_to_json(info):
 
 
 def detect_intent_with_groq(text):
-    """Detecta a intenção do usuário usando a API da GROQ"""
+    # Detecta a intenção do usuário usando a API da GROQ
     url = "https://api.groq.com/openai/v1/chat/completions"
     headers = {"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"}
     
@@ -153,7 +153,7 @@ def detect_intent_with_groq(text):
         return "criar"
 
 def buscar_lembretes():
-    """Busca e retorna todos os lembretes salvos"""
+    # Busca e retorna todos os lembretes salvos
     lembretes = []
     
     # Lista todos os arquivos JSON na pasta de lembretes
@@ -167,7 +167,7 @@ def buscar_lembretes():
     return lembretes
 
 def mostrar_lembretes(lembretes):
-    """Mostra os lembretes de forma organizada"""
+    # Mostra os lembretes de forma organizada
     if not lembretes:
         print("Nenhum lembrete encontrado!")
         return
