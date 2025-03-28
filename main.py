@@ -14,13 +14,25 @@ load_dotenv()
 # Configurações
 DURATION = 10  # Tempo de gravação (segundos)
 SAMPLERATE = 44100  # Taxa de amostragem
-OUTPUT_FILE = "audio.wav"  # Arquivo de saída
+AUDIO_DIR = "audios"  # Pasta para arquivos de áudio
+LEMBRETE_DIR = "lembretes"  # Pasta para arquivos JSON
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_MODEL = "llama-3.3-70b-versatile"  # Modelo da GROQ
 
+# Criar diretórios se não existirem
+os.makedirs(AUDIO_DIR, exist_ok=True)
+os.makedirs(LEMBRETE_DIR, exist_ok=True)
 
-def record_audio(filename=OUTPUT_FILE, duration=DURATION, samplerate=SAMPLERATE):
-    """Grava o áudio do microfone e salva como WAV"""
+def get_timestamp():
+    # Retorna timestamp formatado para uso em nomes de arquivo
+    from datetime import datetime
+    return datetime.now().strftime("%Y%m%d_%H%M%S")
+
+def record_audio(duration=DURATION, samplerate=SAMPLERATE):
+    # Grava o áudio do microfone e salva como WAV
+    timestamp = get_timestamp()
+    filename = os.path.join(AUDIO_DIR, f"audio_{timestamp}.wav")
+    
     print("Gravando...")
     audio = sd.rec(int(duration * samplerate), samplerate=samplerate, channels=1, dtype=np.int16)
     sd.wait()  # Aguarda a gravação terminar
@@ -89,8 +101,11 @@ def extract_info_with_groq(text):
         return {"erro": "Falha ao processar resposta da API"}
 
 
-def save_to_json(info, filename="lembrete.json"):
-    #Salva os dados extraídos em um arquivo JSON
+def save_to_json(info):
+    # Salva os dados extraídos em um arquivo JSON
+    timestamp = get_timestamp()
+    filename = os.path.join(LEMBRETE_DIR, f"lembrete_{timestamp}.json")
+    
     with open(filename, "w", encoding="utf-8") as f:
         json.dump(info, f, indent=4, ensure_ascii=False)
     print(f"Lembrete salvo em {filename}")
