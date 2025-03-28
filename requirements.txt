@@ -1,0 +1,6 @@
+sounddevice
+numpy
+wave
+openai-whisper
+requests
+python-dotenv
